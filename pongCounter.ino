@@ -18,12 +18,13 @@ byte score0 = 0;
 byte score1 = 0;
 byte goal = 11; //до скольких очков игра
 
+
 void setup() {
   Serial.begin(9600);
   // disp.clear();
   //  disp.brightness(7);  // яркость, 0 - 7 (минимум - максимум)
-   oled.init();
-   Wire.setClock(800000L);   // макс. 800'000
+  oled.init();
+  Wire.setClock(800000L);   // макс. 800'000
 }
 
 void Put_in()
@@ -57,12 +58,18 @@ void showDisp()
   //  disp.display(2, score1);    // 2 ячейка
   //  disp.display(3, '.');    // 3 ячейка
 
-    oled.setScale(2);
-    oled.setCursorXY(0, 0);
-    oled.print(score0);
-    oled.setCursorXY(64, 0);
-    oled.print(score1);
-    oled.update();
+  oled.setScale(3);
+  oled.setCursorXY(0, 0);
+  oled.print("goal:");
+  oled.print(goal);
+  oled.setScale(5);
+  oled.setCursorXY(0, 32);
+  oled.print(score0);
+  oled.setCursorXY(50, 32);
+  oled.print(":");
+  oled.setCursorXY(70, 32);
+  oled.print(score1);
+  oled.update();
 
   Serial.print(score0);
   Serial.print("\t");
@@ -79,18 +86,21 @@ void win(boolean player)// визуальные эффекты для выигр
       break;
   }
 }
-
+void winCheck()
+{
+  if (score0 == goal || score1 == goal)
+  {
+    win(score1 > score0);
+  }
+}
 void loop() {
+
   btn1.tick();//обязательный постоянный опрос
   btn2.tick();
 
   Put_in();//чистим дисплей после любого действия
   showDisp();//вывод на дисплей
   winCheck();
-  if (score0 == goal || score1 == goal)
-  {
-    win(score1 > score0);
-  }
-  //
+
   //showdisp();//вывод на дисплей
 }
