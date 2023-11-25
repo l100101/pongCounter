@@ -15,9 +15,25 @@ Button btn2(5);
 
 byte score0 = 0;
 byte score1 = 0;
-byte goal = 11; //до скольких очков игра
+byte goal = 21; //до скольких очков игра
 
+void start_anim()
+{
+  oled.setScale(1);
+  //oled.circle(20, 30, 5, OLED_FILL);        // окружность с центром в (x,y, с радиусом)
+  for (int i = 5; i <= 120; i = i + 5)
+  {
+    oled.setCursorXY(0, 30);
+    oled.print("PoNg CoUnTeR");
+    oled.circle(i, 50, 5, OLED_FILL);        // окружность с центром в (x,y, с радиусом)
+    delay(100);
+    oled.update();
+  }
 
+  oled.update();
+  delay(1500);
+  oled.clear();
+}
 void setup() {
   // Serial.begin(9600);
   // disp.clear();
@@ -27,14 +43,7 @@ void setup() {
   Wire.setClock(800000L);   // макс. 800'000
   start_anim();
 }
-void start_anim()
-{
-  oled.setScale(4);
-  oled.setCursorXY(0, 30);
-  oled.print("PoNg CoUnTeR");
-  delay(1500);
-  oled.clear();
-}
+
 void Put_in()
 {
 
