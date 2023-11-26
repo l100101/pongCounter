@@ -21,7 +21,7 @@ void start_anim()
 {
   oled.setScale(1);
   //oled.circle(20, 30, 5, OLED_FILL);        // окружность с центром в (x,y, с радиусом)
-  for (int i = 5; i <= 120; i = i + 5)
+  for (int i = 5; i <= 120; i = i + 15)
   {
     oled.setCursorXY(0, 30);
     oled.print("PoNg CoUnTeR");
@@ -103,12 +103,32 @@ void win(boolean player)// визуальные эффекты для выигр
   switch (player)
   {
     case 0:
-      win0();
+      //win0();
+      for (int i = 128; i > -250; i = i - 10)
+      {
+        oled.clear();
+        oled.setCursorXY(i, 30);
+        oled.print("Player 0 wins!");
+        oled.update();
+        delay(80);
+      }
       break;
-      win1();
+    //win1();
+
     case 1:
+      for (int i = 128; i > -250; i = i - 10)
+      {
+        oled.clear();
+        oled.setCursorXY(i, 30);
+        oled.print("Player 1 wins!");
+        oled.update();
+        delay(80);
+      }
       break;
   }
+  oled.clear();
+  score0 = 0;
+  score1 = 0;
 }
 void winCheck()
 {
