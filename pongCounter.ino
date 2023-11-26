@@ -4,6 +4,7 @@
 #include <EncButton.h>
 //#include <GyverTM1637.h>
 #include <GyverOLED.h>
+#include "bitmap.h"
 
 #define EB_HOLD_TIME 400    // таймаут удержания (кнопка)
 
@@ -30,8 +31,11 @@ void start_anim()
     oled.update();
   }
 
+  delay(500);
+  oled.clear();
+  oled.drawBitmap(0, 0, bitmap_128x64, 128, 64, BITMAP_NORMAL, BUF_ADD);
   oled.update();
-  delay(1500);
+  delay(2500);
   oled.clear();
 }
 void setup() {
@@ -44,7 +48,7 @@ void setup() {
   start_anim();
 }
 
-void Put_in()
+boolean Put_in()
 {
 
   if (enc.click())  //pts=0;
@@ -52,18 +56,19 @@ void Put_in()
     score0 = 0;
     score1 = 0;
     oled.clear();
+    return 1;
   }
-  if (btn1.hold())  //pts--
-    score0--;
+  if (btn1.hold()){  //pts--
+    score0--; return 1;}
 
-  if (btn2.hold())  //pts--
-    score1--;
+  if (btn2.hold()){  //pts--
+    score1--; return 1;}
 
-  if (btn1.click())
-    score0++;
+  if (btn1.click()){
+    score0++; return 1;}
 
-  if (btn2.click())
-    score1++;
+  if (btn2.click()){
+    score1++;return 1;}
 
 }
 void showDisp()
@@ -126,6 +131,11 @@ void win(boolean player)// визуальные эффекты для выигр
       }
       break;
   }
+
+  oled.clear();
+  oled.drawBitmap(0, 0, bitmap_128x64, 128, 64, BITMAP_NORMAL, BUF_ADD);
+  oled.update();
+  delay(2500);
   oled.clear();
   score0 = 0;
   score1 = 0;
@@ -143,7 +153,9 @@ void loop() {
   btn2.tick();
   enc.tick();
 
-  Put_in();//чистим дисплей после любого действия
+  if (Put_in()) 
+ oled.clear();
+ //чистим дисплей после любого действия
   showDisp();//вывод на дисплей
   winCheck();
 
