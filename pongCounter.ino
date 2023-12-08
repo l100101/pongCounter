@@ -95,14 +95,6 @@ void showDisp()
   //  Serial.print("\t");
   //  Serial.println(score1);
 }
-void win0()
-{
-
-}
-void win1()
-{
-
-}
 void win(boolean player)// визуальные эффекты для выигрыша 1-го и 2-го игрока
 {
   switch (player)
