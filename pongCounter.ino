@@ -4,12 +4,23 @@
 #include <EncButton.h>
 //#include <GyverTM1637.h>
 #include <GyverOLED.h>
+#include <microLED.h>
 #include "bitmap.h"
 
 #define EB_HOLD_TIME 400    // таймаут удержания (кнопка)
+#define M_PIN 2       // пин матрицы
+#define M_WIDTH 15    // ширина матрицы
+#define M_HEIGHT 10    // высота матрицы
+#define NUM_LEDS (M_WIDTH * M_HEIGHT) // для удобства запомним и количство ледов
+#define COLOR_DEBTH 3
 
-//GyverTM1637 disp(CLK, DIO);
-GyverOLED<SSD1306_128x64, OLED_BUFFER> oled;
+microLED<NUM_LEDS, M_PIN, MLED_NO_CLOCK, LED_WS2812, ORDER_GRB, CLI_AVER> matrix(M_WIDTH, M_HEIGHT, ZIGZAG, LEFT_TOP, DIR_DOWN);
+// тип матрицы: ZIGZAG - зигзаг, PARALLEL - параллельная
+// угол подключения: LEFT_BOTTOM - левый нижний, LEFT_TOP - левый верхний, RIGHT_TOP - правый верхний, RIGHT_BOTTOM - правый нижний
+// направление ленты из угла подключения: DIR_RIGHT - вправо, DIR_UP - вверх, DIR_LEFT - влево, DIR_DOWN - вниз
+// шпаргалка по настройке матрицы в папке docs в библиотеке
+
+
 Button enc(4);
 Button btn1(6);
 Button btn2(5);
@@ -30,7 +41,6 @@ void start_anim()
     delay(100);
     oled.update();
   }
-
   delay(500);
   oled.clear();
   oled.drawBitmap(0, 0, bitmap_128x64, 128, 64, BITMAP_NORMAL, BUF_ADD);
@@ -42,11 +52,20 @@ void setup() {
   // Serial.begin(9600);
   // disp.clear();
   //  disp.brightness(7);  // яркость, 0 - 7 (минимум - максимум)
-  oled.init();
-  oled.clear();
+  matrix.setBrightness(60);
+  matrix.clear();
+  
   Wire.setClock(800000L);   // макс. 800'000
+  matrix.show();
   start_anim();
 }
+
+void print_digit_0()
+{
+  matrix.
+}
+
+
 
 boolean Put_in()
 {
@@ -73,11 +92,6 @@ boolean Put_in()
 }
 void showDisp()
 {
-  //  disp.display(0, score0);    // 0 ячейка
-  //  disp.display(1, '.');    // 1 ячейка
-  //  disp.display(2, score1);    // 2 ячейка
-  //  disp.display(3, '.');    // 3 ячейка
-
   oled.setScale(2);
   oled.setCursorXY(0, 0);
   oled.print("goal:");
@@ -90,7 +104,8 @@ void showDisp()
   oled.setCursorXY(70, 32);
   oled.print(score1);
   oled.update();
-
+ 
+  matrix.show();
   //  Serial.print(score0);
   //  Serial.print("\t");
   //  Serial.println(score1);
@@ -154,10 +169,8 @@ void loop() {
   enc.tick();
 
   if (Put_in()) 
- oled.clear();
+   matrix.clear();
  //чистим дисплей после любого действия
-  showDisp();//вывод на дисплей
   winCheck();
-
-  //showdisp();//вывод на дисплей
+  showDisp();//вывод на дисплей
 }
