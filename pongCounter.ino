@@ -9,10 +9,13 @@
 
 #define EB_HOLD_TIME 400    // таймаут удержания (кнопка)
 #define M_PIN 2       // пин матрицы
-#define M_WIDTH 15    // ширина матрицы
-#define M_HEIGHT 10    // высота матрицы
+#define M_WIDTH 16    // ширина матрицы
+#define M_HEIGHT 8    // высота матрицы
 #define NUM_LEDS (M_WIDTH * M_HEIGHT) // для удобства запомним и количство ледов
 #define COLOR_DEBTH 3
+
+#define DIGIT_HEIGHT 5 //высота цифры
+
 
 microLED<NUM_LEDS, M_PIN, MLED_NO_CLOCK, LED_WS2812, ORDER_GRB, CLI_AVER> matrix(M_WIDTH, M_HEIGHT, ZIGZAG, LEFT_TOP, DIR_DOWN);
 // тип матрицы: ZIGZAG - зигзаг, PARALLEL - параллельная
@@ -52,9 +55,70 @@ void setup() {
   start_anim();
 }
 
-void print_digit_0()
+void print_digit(byte digit, byte num)// digit 0-3,  num 0-9
 {
- // matrix.
+  byte d=digit*4;
+  //digit>1 ? 
+  //цвет от позиции digit
+  
+  switch (num)
+  {
+    case 0: // рисуем 0
+     for(int i=0; i<DIGIT_HEIGHT; i++)//заливка с нижнего левого угла до верхнего левого 
+     {
+       matrix.set(d,i , mGreen);
+     }
+     for(int i=0; i<DIGIT_HEIGHT; i++)//заливка с нижнего до верхнего 
+     {
+       matrix.set(d+2,i , mGreen);
+     }
+     matrix.set(d+1,0, mGreen);
+     matrix.set(d+1,DIGIT_HEIGHT-1 , mGreen);
+    break;
+
+    case 1:// рисуем 1
+    matrix.set(d,2 , mGreen);
+    matrix.set(d+1,3 , mGreen);
+     for(int i=0; i<DIGIT_HEIGHT; i++)//
+     {
+      matrix.set(d+2,i , mGreen);
+     }
+    break;
+  
+    case 2:// рисуем 2
+    matrix.set(d,0 , mGreen);
+    matrix.set(d+1,0 , mGreen);
+    matrix.set(d+2,0 , mGreen);
+    
+    matrix.set(d,1 , mGreen);
+    matrix.set(d+1,2 , mGreen);
+    matrix.set(d+2,2 , mGreen);
+    
+    matrix.set(d+2,2 , mGreen);
+    matrix.set(d+2,3 , mGreen);
+    matrix.set(d+2,4 , mGreen);
+    break;
+  
+  case 3:
+    for(int i=0; i<DIGIT_HEIGHT; i++)//
+    {
+     matrix.set(d+2,i , mGreen);
+    }
+    matrix.set(d+1,0 , mGreen);
+    matrix.set(d+2,0 , mGreen);
+    
+    matrix.set(d+1,2 , mGreen);
+    matrix.set(d+2,2 , mGreen);
+
+    matrix.set(d+1,4 , mGreen);
+    matrix.set(d+2,4 , mGreen);
+
+  break;
+
+  default:
+    break;
+  }
+
 }
 
 
