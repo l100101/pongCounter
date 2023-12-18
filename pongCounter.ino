@@ -16,21 +16,19 @@
 
 #define DIGIT_HEIGHT 5 //высота цифры
 
-
 microLED<NUM_LEDS, M_PIN, MLED_NO_CLOCK, LED_WS2812, ORDER_GRB, CLI_AVER> matrix(M_WIDTH, M_HEIGHT, ZIGZAG, LEFT_TOP, DIR_DOWN);
 // тип матрицы: ZIGZAG - зигзаг, PARALLEL - параллельная
 // угол подключения: LEFT_BOTTOM - левый нижний, LEFT_TOP - левый верхний, RIGHT_TOP - правый верхний, RIGHT_BOTTOM - правый нижний
 // направление ленты из угла подключения: DIR_RIGHT - вправо, DIR_UP - вверх, DIR_LEFT - влево, DIR_DOWN - вниз
 // шпаргалка по настройке матрицы в папке docs в библиотеке
 
-
 Button enc(4);
 Button btn1(6);
 Button btn2(5);
 
-byte score0 = 0;
-byte score1 = 0;
-byte goal = 21; //до скольких очков игра
+uint8_t score0 = 0;
+uint8_t score1 = 0;
+uint8_t goal = 21; //до скольких очков игра
 
 void start_anim()
 {
@@ -55,73 +53,92 @@ void setup() {
   start_anim();
 }
 
-void print_digit(byte digit, byte num)// digit 0-3,  num 0-9
+void print_digit(uint8_t digit, uint8_t num) // digit 0-3,  num 0-9
 {
-  byte d=digit*4;
-  //digit>1 ? 
-  //цвет от позиции digit
-  
+  uint8_t d = digit * 4;
+  // digit>1 ?
+  // цвет от позиции digit
+  if (num>9)
+  {
+    uint8_t digit0 = num / 10;
+    uint8_t digit1 = num % 10;
+    print_digit(digit, digit0);
+    print_digit(digit+1,digit1);
+    return;
+  }
+
+  matrix.set(7, 2, mRed);// : двоеточие между очками
+  matrix.set(7, 4, mRed);
+
   switch (num)
   {
-    case 0: // рисуем 0
-     for(int i=0; i<DIGIT_HEIGHT; i++)//заливка с нижнего левого угла до верхнего левого 
-     {
-       matrix.set(d,i , mGreen);
-     }
-     for(int i=0; i<DIGIT_HEIGHT; i++)//заливка с нижнего до верхнего 
-     {
-       matrix.set(d+2,i , mGreen);
-     }
-     matrix.set(d+1,0, mGreen);
-     matrix.set(d+1,DIGIT_HEIGHT-1 , mGreen);
-    break;
-
-    case 1:// рисуем 1
-    matrix.set(d,2 , mGreen);
-    matrix.set(d+1,3 , mGreen);
-     for(int i=0; i<DIGIT_HEIGHT; i++)//
-     {
-      matrix.set(d+2,i , mGreen);
-     }
-    break;
-  
-    case 2:// рисуем 2
-    matrix.set(d,0 , mGreen);
-    matrix.set(d+1,0 , mGreen);
-    matrix.set(d+2,0 , mGreen);
-    
-    matrix.set(d,1 , mGreen);
-    matrix.set(d+1,2 , mGreen);
-    matrix.set(d+2,2 , mGreen);
-    
-    matrix.set(d+2,2 , mGreen);
-    matrix.set(d+2,3 , mGreen);
-    matrix.set(d+2,4 , mGreen);
-    break;
-  
-  case 3:
-    for(int i=0; i<DIGIT_HEIGHT; i++)//
+  case 0:                                  // рисуем 0
+    for (int i = 0; i < DIGIT_HEIGHT; i++) // заливка с нижнего левого угла до верхнего левого
     {
-     matrix.set(d+2,i , mGreen);
+      matrix.set(d, i, mGreen);
     }
-    matrix.set(d+1,0 , mGreen);
-    matrix.set(d+2,0 , mGreen);
+    for (int i = 0; i < DIGIT_HEIGHT; i++) // заливка с нижнего до верхнего
+    {
+      matrix.set(d + 2, i, mGreen);
+    }
+    matrix.set(d + 1, 0, mGreen);
+    matrix.set(d + 1, DIGIT_HEIGHT - 1, mGreen);
+    break;
+
+  case 1: // рисуем 1
+    matrix.set(d, 2, mGreen);
+    matrix.set(d + 1, 3, mGreen);
+    for (int i = 0; i < DIGIT_HEIGHT; i++) //
+    {
+      matrix.set(d + 2, i, mGreen);
+    }
+    break;
+
+  case 2: // рисуем 2
+    matrix.set(d, 0, mGreen);
+    matrix.set(d + 1, 0, mGreen);
+    matrix.set(d + 2, 0, mGreen);
+
+    matrix.set(d, 1, mGreen);
+    matrix.set(d + 1, 2, mGreen);
+    matrix.set(d + 2, 2, mGreen);
+
+    matrix.set(d + 2, 2, mGreen);
+    matrix.set(d + 2, 3, mGreen);
+    matrix.set(d + 2, 4, mGreen);
+    break;
+
+  case 3:
+    for (int i = 0; i < DIGIT_HEIGHT; i++) //
+    {
+      matrix.set(d + 2, i, mGreen);
+    }
+    matrix.set(d + 1, 0, mGreen);
+    matrix.set(d + 2, 0, mGreen);
+
+    matrix.set(d + 1, 2, mGreen);
+    matrix.set(d + 2, 2, mGreen);
+
+    matrix.set(d + 1, 4, mGreen);
+    matrix.set(d + 2, 4, mGreen);
+    break;
+
+  case 4:
+    for (int i = 0; i < DIGIT_HEIGHT; i++) //
+    {
+      matrix.set(d + 2, i, mGreen);
+    }
+    matrix.set(d, 2, mGreen);
+    matrix.set(d, 3, mGreen);
+    matrix.set(d, 4, mGreen);
     
-    matrix.set(d+1,2 , mGreen);
-    matrix.set(d+2,2 , mGreen);
-
-    matrix.set(d+1,4 , mGreen);
-    matrix.set(d+2,4 , mGreen);
-
+    matrix.set(d+1, 2, mGreen);
   break;
 
   default:
     break;
   }
-
 }
-
-
 
 boolean Put_in()
 {
@@ -147,19 +164,10 @@ boolean Put_in()
 }
 void showDisp()
 {
-  oled.setScale(2);
-  oled.setCursorXY(0, 0);
-  oled.print("goal:");
-  oled.print(goal);
-  oled.setScale(5);
-  oled.setCursorXY(0, 32);
-  oled.print(score0);
-  oled.setCursorXY(50, 32);
-  oled.print(":");
-  oled.setCursorXY(70, 32);
-  oled.print(score1);
-  oled.update();
- 
+  matrix.clear();
+  print_digit(0, score0); 
+  print_digit(2, score1);
+  
   matrix.show();
   //  Serial.print(score0);
   //  Serial.print("\t");
@@ -216,7 +224,6 @@ void winCheck()
   }
 }
 void loop() {
-
   btn1.tick();//обязательный постоянный опрос
   btn2.tick();
   enc.tick();
