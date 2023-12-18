@@ -3,8 +3,6 @@
 //add running text
 #include <Arduino.h>
 #include <EncButton.h>
-//#include <GyverTM1637.h>
-#include <GyverOLED.h>
 #include <microLED.h>
 #include "bitmap.h"
 
