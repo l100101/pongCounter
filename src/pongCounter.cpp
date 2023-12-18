@@ -33,23 +33,14 @@ uint8_t goal = 21; //до скольких очков игра
 
 void start_anim()
 {
-  for (int i = 5; i <= 120; i = i + 15)
-  {
-    oled.setCursorXY(0, 30);
-    oled.print("PoNg CoUnTeR");
-    oled.circle(i, 50, 5, OLED_FILL);        // окружность с центром в (x,y, с радиусом)
-    delay(100);
-    oled.update();
-  }
-  delay(2500);
-  oled.clear();
+
 }
 void setup() {
   // Serial.begin(9600);
   matrix.setBrightness(60);
   matrix.clear();
   
-  Wire.setClock(800000L);   // макс. 800'000
+  //Wire.setClock(800000L);   // макс. 800'000
   matrix.show();
   start_anim();
 }
@@ -147,7 +138,7 @@ boolean Put_in()
   {
     score0 = 0;
     score1 = 0;
-    oled.clear();
+    matrix.clear();
     return 1;
   }
   if (btn1.hold()){  //pts--
@@ -191,30 +182,21 @@ void win(boolean player)// визуальные эффекты для выигр
       //win0();
       for (int i = 128; i > -250; i = i - 10)
       {
-        oled.clear();
-        oled.setCursorXY(i, 30);
-        oled.print("Player 0 wins!");
-        oled.update();
+
         delay(80);
       }
       break;
     case 1:
       for (int i = 128; i > -250; i = i - 10)
       {
-        oled.clear();
-        oled.setCursorXY(i, 30);
-        oled.print("Player 1 wins!");
-        oled.update();
+ 
         delay(80);
       }
       break;
   }
 
-  oled.clear();
-  oled.drawBitmap(0, 0, bitmap_128x64, 128, 64, BITMAP_NORMAL, BUF_ADD);
-  oled.update();
   delay(2500);
-  oled.clear();
+
   score0 = 0;
   score1 = 0;
 }
