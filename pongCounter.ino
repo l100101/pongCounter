@@ -31,8 +31,6 @@ byte goal = 21; //до скольких очков игра
 
 void start_anim()
 {
-  oled.setScale(1);
-  //oled.circle(20, 30, 5, OLED_FILL);        // окружность с центром в (x,y, с радиусом)
   for (int i = 5; i <= 120; i = i + 15)
   {
     oled.setCursorXY(0, 30);
@@ -41,17 +39,11 @@ void start_anim()
     delay(100);
     oled.update();
   }
-  delay(500);
-  oled.clear();
-  oled.drawBitmap(0, 0, bitmap_128x64, 128, 64, BITMAP_NORMAL, BUF_ADD);
-  oled.update();
   delay(2500);
   oled.clear();
 }
 void setup() {
   // Serial.begin(9600);
-  // disp.clear();
-  //  disp.brightness(7);  // яркость, 0 - 7 (минимум - максимум)
   matrix.setBrightness(60);
   matrix.clear();
   
@@ -62,14 +54,13 @@ void setup() {
 
 void print_digit_0()
 {
-  matrix.
+ // matrix.
 }
 
 
 
 boolean Put_in()
 {
-
   if (enc.click())  //pts=0;
   {
     score0 = 0;
@@ -133,8 +124,6 @@ void win(boolean player)// визуальные эффекты для выигр
         delay(80);
       }
       break;
-    //win1();
-
     case 1:
       for (int i = 128; i > -250; i = i - 10)
       {
