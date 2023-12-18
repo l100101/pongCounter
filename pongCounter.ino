@@ -1,11 +1,14 @@
 //Счётчик для пинг- понга
 //добавить аимации запуска/выигрыша
+//add running text
 
 #include <EncButton.h>
 //#include <GyverTM1637.h>
 #include <GyverOLED.h>
 #include <microLED.h>
 #include "bitmap.h"
+
+//#define DEBUG 
 
 #define EB_HOLD_TIME 400    // таймаут удержания (кнопка)
 #define M_PIN 2       // пин матрицы
@@ -56,8 +59,11 @@ void setup() {
 void print_digit(uint8_t digit, uint8_t num) // digit 0-3,  num 0-9
 {
   uint8_t d = digit * 4;
+  matrix.set(7, 2, mRed);// : двоеточие между очками
+  matrix.set(7, 4, mRed);
   // digit>1 ?
   // цвет от позиции digit
+
   if (num>9)
   {
     uint8_t digit0 = num / 10;
@@ -66,9 +72,6 @@ void print_digit(uint8_t digit, uint8_t num) // digit 0-3,  num 0-9
     print_digit(digit+1,digit1);
     return;
   }
-
-  matrix.set(7, 2, mRed);// : двоеточие между очками
-  matrix.set(7, 4, mRed);
 
   switch (num)
   {
@@ -164,14 +167,15 @@ boolean Put_in()
 }
 void showDisp()
 {
-  matrix.clear();
   print_digit(0, score0); 
   print_digit(2, score1);
-  
   matrix.show();
-  //  Serial.print(score0);
-  //  Serial.print("\t");
-  //  Serial.println(score1);
+  
+  #ifdef DEBUG
+    Serial.print(score0);
+    Serial.print("\t");
+    Serial.println(score1);
+  #endif
 }
 void win0()
 {
