@@ -5,6 +5,7 @@
 #include <EncButton.h>
 #include <microLED.h>
 #include "bitmap.h"
+#include "FastLED.h"
 
 //#define DEBUG 
 
