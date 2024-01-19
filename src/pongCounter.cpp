@@ -6,8 +6,17 @@
 #include <microLED.h>
 #include "bitmap.h"
 #include "FastLED.h"
-
+#include "fonts.h"
 //#define DEBUG 
+
+#define C_BLACK 0x000000
+#define C_GREEN 0x00FF00
+#define C_RED 0xFF0000
+#define C_BLUE 0x0000FF
+#define C_PURPLE 0xFF00FF
+#define C_YELLOW 0xFFFF00
+#define C_CYAN 0x00FFFF
+#define C_WHITE 0xFFFFFF
 
 #define EB_HOLD_TIME 400    // таймаут удержания (кнопка)
 #define M_PIN 2       // пин матрицы
@@ -15,8 +24,25 @@
 #define M_HEIGHT 8    // высота матрицы
 #define NUM_LEDS (M_WIDTH * M_HEIGHT) // для удобства запомним и количство ледов
 #define COLOR_DEBTH 3
-
+#define CURRENT_LIMIT 240   
 #define DIGIT_HEIGHT 5 //высота цифры
+
+uint32_t scrollTimer;
+String runningText = "";
+boolean loadingFlag, fullTextFlag;
+const uint32_t textColors[] PROGMEM = {
+  COLOR1,
+  COLOR2,
+  COLOR3,
+  COLOR4,
+  COLOR5,
+  COLOR6,
+  COLOR7,
+  COLOR8,
+  COLOR9,
+  COLOR10,
+};
+int colorChange[10];
 
 microLED<NUM_LEDS, M_PIN, MLED_NO_CLOCK, LED_WS2812, ORDER_GRB, CLI_AVER> matrix(M_WIDTH, M_HEIGHT, ZIGZAG, LEFT_TOP, DIR_DOWN);
 // тип матрицы: ZIGZAG - зигзаг, PARALLEL - параллельная
@@ -32,9 +58,12 @@ uint8_t score0 = 0;
 uint8_t score1 = 0;
 uint8_t goal = 21; //до скольких очков игра
 
+String text1 = "продам garazh ";
+#define COLOR1 C_WHITE
 void start_anim()
 {
-
+runningText = String(text1);
+  fillString(runningText);
 }
 void setup() {
   // Serial.begin(9600);
